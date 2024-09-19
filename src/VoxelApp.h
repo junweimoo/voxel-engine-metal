@@ -5,6 +5,7 @@
 #ifndef VOXELAPP_H
 #define VOXELAPP_H
 #include "Renderer.h"
+#include "World.h"
 
 class VoxelApp {
     public:
@@ -19,12 +20,14 @@ class VoxelApp {
 
 class VoxelViewDelegate : public MTK::ViewDelegate {
     public:
-        VoxelViewDelegate(MTL::Device* pDevice);
+        VoxelViewDelegate(Renderer* renderer, Camera* camera, World* world);
         virtual ~VoxelViewDelegate() override;
 
         virtual void drawInMTKView( MTK::View* pView ) override;
 
     private:
+        World* world;
+        Camera* camera;
         Renderer* _pRenderer;
 };
 
@@ -39,6 +42,10 @@ class VoxelAppDelegate : public NS::ApplicationDelegate {
         virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
 
     private:
+        Renderer* renderer;
+        Camera* camera;
+        World* world;
+
         NS::Window* _pWindow;
         MTL::Device* _pDevice;
         MTK::View* _pMtkView;

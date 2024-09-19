@@ -28,7 +28,6 @@ private:
     Voxel voxels[SIZE][SIZE][SIZE];
     Renderer* renderer;
 
-    // Mesh data
     std::vector<float> vertexData;
 
     MTL::Buffer* vertexBuffer;

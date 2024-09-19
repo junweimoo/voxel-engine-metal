@@ -9,12 +9,18 @@
 #include <AppKit/AppKit.hpp>
 #include <MetalKit/MetalKit.hpp>
 
+#include "Camera.h"
+
+class World;
+
 class Renderer {
 public:
     Renderer(MTL::Device* pDevice);
     ~Renderer();
 
-    void draw(MTK::View* pView);
+    void beginFrame();
+    void endFrame();
+    void draw(MTK::View* pView, World* world, Camera* camera);
 
     MTL::Device* getDevice();
     MTL::CommandQueue* getCommandQueue();
@@ -24,10 +30,12 @@ private:
     MTL::Device* device;
     MTL::CommandQueue* commandQueue;
     MTL::Library* defaultLibrary;
-    MTL::RenderPipelineState *pipelineState;
+    MTL::RenderPipelineState* pipelineState;
+    MTL::VertexDescriptor* vertexDescriptor;
 
     bool loadShaders();
     bool createPipelineState();
+    MTL::VertexDescriptor* createVertexDescriptor();
 };
 
 #endif //RENDERER_H

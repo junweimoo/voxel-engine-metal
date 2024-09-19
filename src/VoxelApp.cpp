@@ -81,7 +81,18 @@ void VoxelAppDelegate::applicationWillFinishLaunching(NS::Notification *pNotific
 }
 
 void VoxelAppDelegate::applicationDidFinishLaunching(NS::Notification *pNotification) {
-    CGRect frame = (CGRect){ {100.0, 100.0}, {512.0, 512.0} };
+    _pDevice = MTL::CreateSystemDefaultDevice();
+
+    // TODO: refactor this
+    float fov = 60.0f;
+    float aspectRatio = 16.0f / 9.0f;
+    float nearPlane = 0.1f;
+    float farPlane = 1000.0f;
+    camera = new Camera(fov, aspectRatio, nearPlane, farPlane);
+    renderer = new Renderer(_pDevice);
+    world = new World(renderer, camera);
+
+    CGRect frame = (CGRect){ {100.0, 100.0}, {1920.0, 1080.0} };
 
     _pWindow = NS::Window::alloc()->init(
         frame,
@@ -89,17 +100,15 @@ void VoxelAppDelegate::applicationDidFinishLaunching(NS::Notification *pNotifica
         NS::BackingStoreBuffered,
         false );
 
-    _pDevice = MTL::CreateSystemDefaultDevice();
-
     _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
     _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
-    _pMtkView->setClearColor( MTL::ClearColor::Make( 1.0, 0.0, 0.0, 1.0 ) );
+    _pMtkView->setClearColor( MTL::ClearColor::Make( 0.0, 0.0, 0.0, 1.0 ) );
 
-    _pViewDelegate = new VoxelViewDelegate( _pDevice );
+    _pViewDelegate = new VoxelViewDelegate(renderer, camera, world);
     _pMtkView->setDelegate( _pViewDelegate );
 
     _pWindow->setContentView( _pMtkView );
-    _pWindow->setTitle( NS::String::string( "00 - Window", NS::StringEncoding::UTF8StringEncoding ) );
+    _pWindow->setTitle( NS::String::string( "Voxel Engine in Metal", NS::StringEncoding::UTF8StringEncoding ) );
     _pWindow->makeKeyAndOrderFront( nullptr );
 }
 
@@ -109,13 +118,13 @@ bool VoxelAppDelegate::applicationShouldTerminateAfterLastWindowClosed(NS::Appli
 #pragma endregion AppDelegate
 
 #pragma region ViewDelegate
-VoxelViewDelegate::VoxelViewDelegate(MTL::Device *pDevice): MTK::ViewDelegate(), _pRenderer(new Renderer(pDevice)) {}
+VoxelViewDelegate::VoxelViewDelegate(Renderer* renderer, Camera* camera, World* world): MTK::ViewDelegate(), _pRenderer(renderer), camera(camera), world(world) {}
 
 VoxelViewDelegate::~VoxelViewDelegate() {
     delete _pRenderer;
 }
 
 void VoxelViewDelegate::drawInMTKView(MTK::View* pView) {
-    _pRenderer->draw(pView);
+    _pRenderer->draw(pView, world, camera);
 }
 #pragma endregion ViewDelegate

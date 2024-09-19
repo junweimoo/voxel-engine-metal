@@ -142,7 +142,7 @@ void Chunk::AddVoxelMesh(int x, int y, int z, VoxelType type) {
 
 // Render the chunk
 void Chunk::Render(Camera* camera, MTK::View* pView) {
-    if (!vertexBuffer) return;
+    if (vertexBuffer == nullptr) return;
 
     // Get the current command buffer and render command encoder from the renderer
     MTL::CommandQueue* queue = renderer->getCommandQueue();
@@ -153,14 +153,14 @@ void Chunk::Render(Camera* camera, MTK::View* pView) {
     // Set the pipeline state
     renderEncoder->setRenderPipelineState(renderer->getPipelineState());
 
-    // Set vertex buffer
+    // // Set vertex buffer
     renderEncoder->setVertexBuffer(vertexBuffer, 0, 0);
-
-    // Prepare transformation matrices
+    //
+    // // Prepare transformation matrices
     Matrix4x4 viewProj = camera->GetViewProjectionMatrix();
     renderEncoder->setVertexBytes(&viewProj, sizeof(Matrix4x4), 1);
-
-    // Draw the vertices
+    //
+    // // Draw the vertices
     renderEncoder->drawPrimitives(MTL::PrimitiveType::PrimitiveTypeTriangle, 1, vertexData.size() / 6);
 
     // End encoding
