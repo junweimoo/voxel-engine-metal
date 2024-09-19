@@ -16,9 +16,18 @@ public:
 
     void draw(MTK::View* pView);
 
+    MTL::Device* getDevice();
+    MTL::CommandQueue* getCommandQueue();
+    MTL::RenderPipelineState* getPipelineState();
+
 private:
-    MTL::Device* _pDevice;
-    MTL::CommandQueue* _pCommandQueue;
+    MTL::Device* device;
+    MTL::CommandQueue* commandQueue;
+    MTL::Library* defaultLibrary;
+    MTL::RenderPipelineState *pipelineState;
+
+    bool loadShaders();
+    bool createPipelineState();
 };
 
 #endif //RENDERER_H

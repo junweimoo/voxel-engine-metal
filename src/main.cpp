@@ -6,6 +6,6 @@
 
 int main(int argc, char *argv[]) {
     VoxelApp voxel_app;
-    voxel_app.Run();
+    voxel_app.run();
     return 0;
 }

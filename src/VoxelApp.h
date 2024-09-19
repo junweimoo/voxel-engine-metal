@@ -11,7 +11,7 @@ class VoxelApp {
         VoxelApp();
         ~VoxelApp();
 
-        void Run();
+        void run();
 
     private:
         NS::Application* pSharedApplication;

@@ -9,6 +9,15 @@ set(SOURCES
     src/Renderer.cpp
     src/Renderer.h
     src/main.cpp
+        src/World.cpp
+        src/World.h
+        src/Camera.cpp
+        src/Camera.h
+        src/utils/Math.h
+        src/Chunk.cpp
+        src/Chunk.h
+        src/Voxel.cpp
+        src/Voxel.h
 )
 
 include_directories(include)

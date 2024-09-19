@@ -13,7 +13,7 @@ VoxelApp::~VoxelApp() {
 
 }
 
-void VoxelApp::Run() {
+void VoxelApp::run() {
     NS::AutoreleasePool *pPool = NS::AutoreleasePool::alloc()->init();
 
     VoxelAppDelegate delegate;
